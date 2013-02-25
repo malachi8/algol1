@@ -44,7 +44,7 @@ public class TestDeque {
 			assert(deque.removeLast().equals(oneToN[j - 1]));
 		}
 		
-		
+		assert(deque.isEmpty());
 	}
 	
 

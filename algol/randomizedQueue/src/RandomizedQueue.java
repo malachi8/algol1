@@ -31,21 +31,14 @@ public class RandomizedQueue <Item> implements Iterable<Item> {
 
     // push a new item onto the stack
     public void enqueue(Item item) {
+    	if(item == null)
+    		throw new NullPointerException();
+    	
         if (N == a.length) resize(2*a.length);    // double size of array if necessary
         a[N++] = item;                            // add item
     }
 
-    // delete and return the item most recently added
-    public Item pop() {
-        if (isEmpty()) { throw new RuntimeException("Stack underflow error"); }
-        Item item = a[N-1];
-        a[N-1] = null;                              // to avoid loitering
-        N--;
-        // shrink size of array if necessary
-        if (N > 0 && N == a.length/4) resize(a.length/2);
-        return item;
-    }
-    
+ 
     public Item dequeue() {
         if (isEmpty()) { throw new RuntimeException("Stack underflow error"); }
         
@@ -54,7 +47,7 @@ public class RandomizedQueue <Item> implements Iterable<Item> {
         for (int i = randomIndex; i < N - 1; i++){
         	a[i] = a[i + 1];
         }
-        a[N] = null;                              // to avoid loitering
+        a[N - 1] = null;                              // to avoid loitering
         N--;
         // shrink size of array if necessary
         if (N > 0 && N == a.length/4) resize(a.length/2);

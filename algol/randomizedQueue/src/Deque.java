@@ -5,11 +5,13 @@ public class Deque<Item> implements Iterable<Item> {
 	
     private int N;          // size of the stack
     private Node first;     // top of stack
+    private Node last;     // top of stack
 
     // helper linked list class
     private class Node {
         private Item item;
         private Node next;
+        private Node prev;
     }
 
    /**
@@ -17,6 +19,7 @@ public class Deque<Item> implements Iterable<Item> {
      */
     public Deque() {
         first = null;
+        last = null;
         N = 0;
         assert check();
     }
@@ -39,10 +42,19 @@ public class Deque<Item> implements Iterable<Item> {
      * Add the item to the stack.
      */
     public void addFirst(Item item) {
+    	if(item == null)
+    		throw new NullPointerException();
         Node oldfirst = first;
+      
         first = new Node();
         first.item = item;
         first.next = oldfirst;
+        
+        if(oldfirst == null)
+        	last = first;
+        else
+        	oldfirst.prev = first;
+        
         N++;
         assert check();
     }
@@ -54,8 +66,16 @@ public class Deque<Item> implements Iterable<Item> {
     public Item removeFirst() {
         if (isEmpty()) throw new NoSuchElementException("Stack underflow");
         Item item = first.item;        // save item to return
-        first = first.next;            // delete first node
+             
         N--;
+        if(N == 0){
+        	last = null;
+        	first = null;
+        } else {
+        	first = first.next; 
+        	first.prev = null;
+        }
+        
         assert check();
         return item;                   // return the saved item
     }
@@ -104,31 +124,23 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
 
-    private Node findLastNode(){
-    	if (isEmpty()) {
-			return null;
-		}
-
-		Node currentNode = first;
-	
-		while (currentNode.next != null) {			
-			currentNode = currentNode.next;
-		}
-		return currentNode;
-    	
-    }
-
 	public void addLast(Item item) {
 		// insert the item at the end
+		
+		if(item == null)
+    		throw new NullPointerException();
+		
 		if (isEmpty()) {
 			addFirst(item);
 			return;
 		}
 
-		Node lastNode = findLastNode();
+		
 		Node newNode = new Node();
 		newNode.item = item;
-		lastNode.next = newNode;
+		last.next = newNode;
+		newNode.prev = last;
+		last = newNode;
 		 N++;
 	}
 
@@ -137,16 +149,16 @@ public class Deque<Item> implements Iterable<Item> {
 		if (isEmpty()) {
 			return null;
 		}
-
-		Node currentNode = first;
-		Node lastNode = first;
-		while (currentNode.next != null) {
-			lastNode = currentNode;
-			currentNode = currentNode.next;
-		}
-		currentNode.next = null;
+		
+		if(N == 1)
+			return removeFirst();
+		
+		Item returned = last.item;
+		last = last.prev;	
+		last.next = null;
 		 N--;
-		return lastNode.item;
+		 
+		return returned;
 	}
 
 	

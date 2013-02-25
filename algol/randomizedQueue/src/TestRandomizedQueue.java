@@ -7,6 +7,8 @@ import org.junit.Test;
 public class TestRandomizedQueue {
 
 	private String[] oneToN = { "0", "1", "2", "3", "4", "5" };
+	
+	private String[] abc = {"AA", "BB", "BB", "BB", "BB", "BB", "CC", "CC"};
 
 	@Test
 	public void testIterator() {
@@ -39,6 +41,27 @@ public class TestRandomizedQueue {
 		for(int i = 0; i < oneToN.length; i++){ 
 			assert(randomizedQueue.dequeue().equals(oneToN[j - 1]));
 		}
+		
+		
+	}
+	
+	@Test
+	public void testAbc() {
+		
+		RandomizedQueue<String> randomizedQueue = new RandomizedQueue<String>();
+		
+		for(String strNumber : abc){
+			randomizedQueue.enqueue(strNumber);
+		}
+		Iterator<String> iterator = randomizedQueue.iterator();
+		 
+		 int cnt = 7;
+		 int j = 0;
+		 while(iterator.hasNext() && j < cnt){
+			 String strInt = iterator.next();
+			 System.out.println(strInt);
+			 j++;
+		 }
 		
 		
 	}
