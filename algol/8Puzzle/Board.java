@@ -1,4 +1,4 @@
-import java.util.Arrays;
+
 
 public class Board {
 	
@@ -72,7 +72,7 @@ public class Board {
 		// is this board the goal board?		
 		for(int i = 0; i < tiles.length; i++){
 			for(int j = 0; j < tiles[i].length; j++){
-				if(tiles[i][j] != xYToIndex(i, j)){					
+				if(tiles[i][j] != 0 && tiles[i][j] != xYToIndex(i, j)){					
 					return false;
 				}
 			}
@@ -110,9 +110,10 @@ public class Board {
 		// does this board equal y?
 		if(y.getClass() != this.getClass())
 			return false;
+		
 		Board other = (Board) y;
 		for(int i = 0; i < N; i++){
-			for(int j = 0; j < N; i++){
+			for(int j = 0; j < N; j++){
 				if(tiles[i][j] != other.tiles[i][j])
 					return false;
 			}
@@ -121,73 +122,99 @@ public class Board {
 		
 	}
 	
-	private boolean moveLeft(){
-		if(blankX >= 0){			
-			tiles[blankX][blankY] = tiles[blankX - 1][blankY];
-			tiles[blankX - 1][blankY] = 0;
-			blankX--;
-			return true;
+	public boolean equalsParents(Object y) {
+		// does this board equal y?
+		if(y.getClass() != this.getClass())
+			return false;
+		if(previousBoard != null){
+			if(previousBoard.equalsParents(y)){
+				return true;
+			}
 		}
-		return false;
+		
+		return this.equals(y);
+		
 	}
-	
-	private boolean moveRight(){
-		if(blankX <= N){			
-			tiles[blankX][blankY] = tiles[blankX + 1][blankY];
-			tiles[blankX + 1][blankY] = 0;
-			blankX++;
-			return true;
-		}
-		return false;
+
+	private void moveUp() {
+
+		tiles[blankX][blankY] = tiles[blankX + 1][blankY];
+		tiles[blankX + 1][blankY] = 0;
+		blankX++;
+
 	}
-	
-	private boolean moveUp(){
-		if(blankY >  0){
-			tiles[blankX][blankY] = tiles[blankX][blankY + 1];
-			tiles[blankX][blankY + 1] = 0;
-			blankY++;
-			return true;
-		}
-		return false;
+
+	private void moveDown() {
+
+		tiles[blankX][blankY] = tiles[blankX - 1][blankY];
+		tiles[blankX - 1][blankY] = 0;
+		blankX--;
+
 	}
-	
-	private boolean moveDown(){
-		if(blankY <  N - 1){
-			tiles[blankX][blankY] = tiles[blankX][blankY - 1];
-			tiles[blankX][blankY - 1] = 0;
-			blankY--;
-			return true;
-		}
-		return false;
+
+	private void moveLeft() {
+
+		tiles[blankX][blankY] = tiles[blankX][blankY + 1];
+		tiles[blankX][blankY + 1] = 0;
+		blankY++;
+
+	}
+
+	private void moveRight() {
+
+		tiles[blankX][blankY] = tiles[blankX][blankY - 1];
+		tiles[blankX][blankY - 1] = 0;
+		blankY--;
+
 	}
 
 	public Iterable<Board> neighbors() {
 		// all neighboring boards
 		Queue<Board> q = new Queue<Board>();
-		if(blankX <= N){ // can move right
+		System.out.println("-------blankx y:" + blankX + " " + blankY);
+		if(blankY > 0){ // can move right
 			Board moveRight = new Board(cloneArray(tiles));
-			moveRight.previousBoard = this;
+			
 			moveRight.moveRight();
-			q.enqueue(moveRight);
+			
+				q.enqueue(moveRight);
+				//System.out.println("moveRight:" + moveRight);
+				//System.out.println(" man moveRight:" + moveRight.manhattan());
+			
 		}
-		if(blankX >= 0){	 // can move left
+		if(blankY < N - 1){	 // can move left
 			Board moveLeft = new Board(cloneArray(tiles));
-			moveLeft.previousBoard = this;
+			
 			moveLeft.moveLeft();
-			q.enqueue(moveLeft);
+			
+			
+				q.enqueue(moveLeft);
+				//System.out.println("moveLeft:" + moveLeft);
+				//System.out.println(" man moveLeft:" + moveLeft.manhattan());
+			
 		}
-		if(blankY >  0){	 // can move up
+		if(blankX < N - 1){	 // can move up
 			Board moveUp = new Board(cloneArray(tiles));
-			moveUp.previousBoard = this;
+		
 			moveUp.moveUp();
-			q.enqueue(moveUp);
+			
+			
+				q.enqueue(moveUp);
+				//System.out.println("moveUp:" + moveUp);
+				//System.out.println(" man moveUp:" + moveUp.manhattan());
+			
 		}
 		
-		if(blankY <  N - 1){ // can move down
+		if(blankX > 0){ // can move down
 			Board moveDown = new Board(cloneArray(tiles));
-			moveDown.previousBoard = this;
+		
 			moveDown.moveDown();
-			q.enqueue(moveDown);
+			
+			
+				q.enqueue(moveDown);
+				//System.out.println("moveDown:" + moveDown);
+				//System.out.println(" man moveDown:" + moveDown.manhattan());
+			
 		}
 		
 		return q;	

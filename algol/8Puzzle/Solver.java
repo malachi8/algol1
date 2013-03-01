@@ -9,36 +9,38 @@ public class Solver {
 	public Solver(Board initial) {
 		// find a solution to the initial board (using the A* algorithm)
 		initialBoard = initial;
-		
-	}
-	
-	private void insertInitial(Board initial){
 		SearchNode first = new SearchNode(initial, 0, null);
 		minPq.insert(first);
+		
 	}
 	
 	
 	private void step() {
 		SearchNode minSearchNode = minPq.delMin();
+		//System.out.println("deq'd" + minSearchNode.board);
+		System.out.println("deq'd" + minSearchNode.manhattan + " P: " + minSearchNode.priority());
 		if (minSearchNode.board.isGoal()) {
 			goal = minSearchNode;
 			return;
 		}
+		System.out.println("not goal");
 		for (Board b : minSearchNode.board.neighbors()) {
-
-			if (!b.equals(minSearchNode.board)) {
-				SearchNode newNode = new SearchNode(b, minSearchNode.moves + 1,
-						minSearchNode);
-
+		//	System.out.println("neigh" + b);
+			
+			SearchNode newNode = new SearchNode(b, minSearchNode.moves + 1,
+					minSearchNode);
+			if(!minSearchNode.equalsParents(newNode))
 				minPq.insert(newNode);
-			}
+
 		}
 	}
 
 
 	public boolean isSolvable() {
 		// is the initial board solvable?
-		insertInitial(initialBoard);
+		if(goal != null)
+			return true;
+		
 		
 		Solver twinSolver = new Solver(initialBoard.twin());
 		
@@ -52,13 +54,13 @@ public class Solver {
 	public int moves() {
 		// min number of moves to solve initial board; -1 if no solution
 
-		SearchNode node = goal;
-		int moves = 0;
-		while (node.previous != null) {
-			node = node.previous;
-			moves++;
+		if(goal == null){
+			if(isSolvable())
+				return goal.moves;
+			else
+				return -1;
 		}
-		return moves;
+		return goal.moves;
 	}
 
 	public Iterable<Board> solution() {
@@ -96,7 +98,7 @@ public class Solver {
 	    }
 	}
 	
-	private class SearchNode implements Comparator<SearchNode> {
+	private class SearchNode implements Comparable<SearchNode> {
 		
 		private Board board;
 		private int manhattan;
@@ -115,10 +117,10 @@ public class Solver {
 		}
 
 		@Override
-		public int compare(SearchNode o1, SearchNode o2) {
+		public int compareTo(SearchNode obj) {
 			// TODO Auto-generated method stub
-			int o1Priority = o1.priority();
-			int o2Priority = o2.priority();
+			int o1Priority = priority();
+			int o2Priority = obj.priority();
 			if(o1Priority < o2Priority)
 				return -1;
 			else if(o1Priority > o2Priority)
@@ -128,6 +130,19 @@ public class Solver {
 			
 		}
 		
+		public boolean equalsParents(SearchNode y) {
+			// does this board equal y?
+			
+			if(previous != null){
+				if(previous.equalsParents(y)){
+					return true;
+				}
+			}
+			
+			return this.board.equals(y.board);
+			
+		}
+
 		
 	}
 
