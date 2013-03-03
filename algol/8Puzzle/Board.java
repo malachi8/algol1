@@ -7,6 +7,8 @@ public class Board {
 	int blankX = 0;
 	int blankY = 0;
 	private Board previousBoard;
+	private int manhattan;
+	private int hamming;
 	
 	public Board(int[][] blocks) {
 		// construct a board from an N-by-N array of blocks
@@ -32,6 +34,7 @@ public class Board {
 
 	public int hamming() {
 		// number of blocks out of place
+		
 		int hamming = 0;
 		for(int i = 0; i < tiles.length; i++){
 			for(int j = 0; j < tiles[i].length; j++){
@@ -40,6 +43,7 @@ public class Board {
 				}
 			}
 		}
+		
 		return hamming;
 	}
 
@@ -49,7 +53,7 @@ public class Board {
 		for(int i = 0; i < tiles.length; i++){
 			for(int j = 0; j < tiles[i].length; j++){
 				if(tiles[i][j] != 0 && tiles[i][j] != xYToIndex(i, j)){				
-					manhattan = manhattan + tilesToGoalXy(tiles[i][j]);
+					manhattan = manhattan + Math.abs(tilesToGoalXy(tiles[i][j]) - xYToIndex(i, j));
 				}
 			}
 		}
@@ -60,12 +64,23 @@ public class Board {
 	private int xYToIndex(int x, int y){
 		return (N * x) + y + 1;
 	}
+	/*
+	private int tilesToGoalXy(int index){
+		//int[][] returnPos = new int[1][2];
+		//returnPos[0][0] = index / N + 1;
+		//returnPos[0][1] = (index / N) +  (index % N) + 1;
+		return (index / N + 1) + ((index / N) +  (index % N) + 1);
+		//return returnPos[0][0] + returnPos[0][1];
+	}
+*/
+	
 	
 	private int tilesToGoalXy(int index){
-		int[][] returnPos = new int[1][2];
-		returnPos[0][0] = index / N + 1;
-		returnPos[0][1] = (index / N) +  (index % N) + 1;
-		return returnPos[0][0] + returnPos[0][1];
+		//int[][] returnPos = new int[1][2];
+		//returnPos[0][0] = index / N + 1;
+		//returnPos[0][1] = (index / N) +  (index % N) + 1;
+		return (index / N + 1) + ((index / N) +  (index % N) + 1);
+		//return returnPos[0][0] + returnPos[0][1];
 	}
 
 	public boolean isGoal() {
@@ -122,19 +137,6 @@ public class Board {
 		
 	}
 	
-	public boolean equalsParents(Object y) {
-		// does this board equal y?
-		if(y.getClass() != this.getClass())
-			return false;
-		if(previousBoard != null){
-			if(previousBoard.equalsParents(y)){
-				return true;
-			}
-		}
-		
-		return this.equals(y);
-		
-	}
 
 	private void moveUp() {
 
