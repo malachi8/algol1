@@ -53,7 +53,7 @@ public class Board {
 		for(int i = 0; i < tiles.length; i++){
 			for(int j = 0; j < tiles[i].length; j++){
 				if(tiles[i][j] != 0 && tiles[i][j] != xYToIndex(i, j)){				
-					manhattan = manhattan + Math.abs(tilesToGoalXy(tiles[i][j]) - xYToIndex(i, j));
+					manhattan = manhattan + tileDifference(tiles[i][j], i, j);
 				}
 			}
 		}
@@ -80,6 +80,16 @@ public class Board {
 		//returnPos[0][0] = index / N + 1;
 		//returnPos[0][1] = (index / N) +  (index % N) + 1;
 		return (index / N + 1) + ((index / N) +  (index % N) + 1);
+		//return returnPos[0][0] + returnPos[0][1];
+	}
+	
+	private int tileDifference(int number, int x, int y){
+		//int[][] returnPos = new int[1][2];
+		int diffX = Math.abs(x - (number / N));
+		int diffY = Math.abs(y - ((number % N) - 1));
+		return diffX + diffY;
+		//returnPos[0][1] = (index / N) +  (index % N) + 1;
+		//return (index / N + 1) + ((index / N) +  (index % N) + 1);
 		//return returnPos[0][0] + returnPos[0][1];
 	}
 
