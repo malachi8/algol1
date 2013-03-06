@@ -21,9 +21,9 @@ public class Solver {
 		}
 		
 		SearchNode minSearchNode = minPq.delMin();
-		// System.out.println("deq'd" + minSearchNode.board);
+	//	System.out.println("deq'd" + minSearchNode.board);
 	//System.out.println("deq'd" + minSearchNode.manhattan + " P: "
-	//			+ minSearchNode.priority());
+		//		+ minSearchNode.priority());
 		if (minSearchNode.board.isGoal()) {
 			goal = minSearchNode;
 			return;

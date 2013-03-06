@@ -78,10 +78,16 @@ public class Board {
 
 	private int tileDifference(int number, int i, int j) {
 		// int[][] returnPos = new int[1][2];
+		int	diffI = 0;
+		if(number <= N){
+			diffI = i;
+		} else {			
+			//diffI = Math.abs(i - ((number / N)));
+			diffI = Math.abs(i - (((number - 1) / N)));
+		}
 		
-		int	diffI = Math.abs(i - (number / N));
-		
-		int diffJ = Math.abs(j - ((number % N)));
+		//int diffJ = Math.abs(j - ((number % N) - 1));
+		int diffJ = Math.abs(j - (number - 1) % N);
 		return diffI + diffJ;
 		// returnPos[0][1] = (index / N) + (index % N) + 1;
 		// return (index / N + 1) + ((index / N) + (index % N) + 1);
@@ -103,7 +109,7 @@ public class Board {
 	public Board twin() {
 		// a board obtained by exchanging two adjacent blocks in the same row
 		int[][] twin = cloneArray(tiles);
-		for (int i = 0; i < twin.length - 1; i++) {
+		for (int i = 0; i < twin.length; i++) {
 			for (int j = 0; j < twin[i].length - 1; j++) {
 				if (twin[i][j] != 0 && twin[i][j + 1] != 0) {
 					int t = twin[i][j];
