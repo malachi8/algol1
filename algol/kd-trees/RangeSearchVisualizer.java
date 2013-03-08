@@ -75,11 +75,11 @@ public class RangeSearchVisualizer {
             StdDraw.setPenColor(StdDraw.BLACK);
             StdDraw.setPenRadius(.01);
             brute.draw();
-            /*
+            
             StdDraw.setPenColor(StdDraw.GREEN);
             StdDraw.setPenRadius(.01);
             kdtree.draw();
-             */
+             
             // draw the rectangle
             StdDraw.setPenColor(StdDraw.BLACK);
             StdDraw.setPenRadius();

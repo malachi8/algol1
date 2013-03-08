@@ -1,6 +1,6 @@
 public class PointSET {
 
-	SET<Point2D> pointSet = new SET<Point2D>();
+	private SET<Point2D> pointSet = new SET<Point2D>();
 
 	public PointSET() {
 		// construct an empty set of points
